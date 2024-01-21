@@ -26,8 +26,6 @@ In Backend Folder
 `MONGOOSE_URI=YOUR_MONGOOSE_URI`
 
 
-
-
 In the Root Folder:
 
 `npm i -y`
