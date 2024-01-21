@@ -1,0 +1,33 @@
+.ProfileContainer{
+    background-color: rgb(235, 238, 242);
+
+}
+
+.subProfileContainer{
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ProfileLeftbar,
+.Profilerightbar {
+    /* Define the desired width for the left and right bars */
+    position: sticky;
+    top: 8vh;
+    border-radius: 15px;
+    height: 92vh;
+    margin: 0 1vw;
+    overflow-y: auto;
+
+}
+
+.ProfileLeftbar::-webkit-scrollbar, .Profilerightbar::-webkit-scrollbar {
+    /* display: none; Hide scrollbar for Chrome, Safari and Opera */
+}
+
+.mainPostContainer {
+    flex: 1; /* Occupy remaining space */
+    overflow-y: auto; /* Allow scrolling for the main post container */
+    padding: 2vh; /* Adjust padding as needed */
+}

@@ -1,0 +1,61 @@
+.Leftbar{
+    width: 25vw;
+}
+
+.NotificationsContainer{
+    height: 50vh;
+    
+}
+
+.ScrollContainerDisNone{
+    overflow-y: scroll;
+    height: 40vh;
+}
+
+.ScrollContainerDisNone::-webkit-scrollbar{
+    display: none;
+}
+
+.notificationItem{
+    display: flex;
+    margin: 0px 5px;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+}
+
+.notificationimg{
+    width:37px;
+    height: 37px;
+    border-radius: 50%;
+}
+.followinguserimage{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+
+}
+
+.ExploreImageContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* padding: 10px; */
+    justify-content: space-around;
+}
+
+.likeimage{
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+}
+
+.exploreimage{
+    width: 30%;
+    margin-left: 4px;
+    height: 50%;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-top: 6px;
+}
