@@ -11,8 +11,8 @@
 .NotificationsContainer{
     width: 20vw;
     margin: 2vh auto;
+    height: 50vh;
     background-color: var(--primary-color);
-    /* margin-top: 20px; */
     border-radius: 20px;
 }
 
@@ -44,4 +44,13 @@
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.profilepage-follow-button{
+    cursor: pointer;
+}
+
+.profilepage-follow-button:hover{
+    background-color: var(--secondary-color);
+    color: white;
 }

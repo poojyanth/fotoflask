@@ -2,6 +2,7 @@ import './App.css';
 import Home from './Pages/Home/Home'; 
 import Login from './Pages/Login/Login';
 import Profile from './Pages/Profile/Profile';
+import Organization from './Pages/OrganizationPage/Organization';
 import { toast, ToastContainer } from 'react-toastify';
 import Signup from './Pages/Signup/Signup';
 import Explorepage from './Pages/ExplorePage/Explorepage';
@@ -18,7 +19,7 @@ import Carousel from './Pages/Reels/Carousel';
 import AdminPage from './Pages/Admin/Admin';
 import Likedposts from './Pages/Likedposts/Likedposts';
 import { useSelector}  from 'react-redux'
-
+import Addnewreel from './Component/AddnewReel/Addnewreel';
 
  
 import {
@@ -32,11 +33,7 @@ import {
 function App() {
 
   const userDetails = useSelector((state)=>state.user);
-  // console.log(userDetails)
   let user = userDetails.user;
-  // console.log(user.user.username);
-  // console.log(user.user._id)
-
 
   return (
 
@@ -46,7 +43,8 @@ function App() {
         <Routes>
           <Route exact path="/" element={user!== null ? <Home/>: <Navigate to={"/landingpage"}/>} />
           <Route exact path="/landingpage" element={<LandingPage/>}/>
-          <Route exact path="/profilepage/:id" element={user!== null ? <Profile/>: <Navigate to={"/landingpage"}/>}/>
+          <Route exact path="/organization/:id" element={user!== null && user.user.type===2 ? <Organization/>: <Navigate to={"/landingpage"}/>}/>
+          <Route exact path="/profilepage/:id" element={user!== null ? <Profile/>: <Login/>}/>
           <Route exact path="/signup" element={user!== null ? <Navigate to={"/"}/> : <Signup/>}/>
           <Route exact path="/login" element={user!== null ? <Navigate to={"/"}/> : <Login/>}/>  
           <Route exact path="/postpage/:postid" element={user!== null ? <PostPage/> : <Navigate to={"/landingpage"}/>}/>
@@ -61,15 +59,15 @@ function App() {
           <Route exact path="/admin" element={user!==null && user.user.username==='Admin' ? <AdminPage/> : <Navigate to={'/'}/>}/>
           <Route exact path="/*" element={<Navigate to={"/"}/>}/>
           <Route exact path="/test" element={<LoadingAnimation2 />} />
-          <Route exact path="/viewstory/:pictureid" element={< ViewStoryImage/>}/>
+          <Route exact path="/viewstory/:pictureid" element={< ViewStoryImage/>}/> 
+          <Route exact path="/likedposts" element={< Likedposts/>}/>
           {/* <Route exact path="/explore" element={<Explore/>}/> */}
-          <Route exact path="/reels" element={<Carousel items={['https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703178916135Snapchat-1450444302.mp4?alt=media&token=9ed77aae-978b-4f05-97dc-daeec89dba14',
-        'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703179138384VID-20211205-WA0000.mp4?alt=media&token=c1ee486e-6023-4593-bf58-cc73ebff1b4b',
-        'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703179290310VID-20220507-WA0022.mp4?alt=media&token=8659bf27-1f96-45a4-ba74-da59c226875e',
-        'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703179345780VID-20211205-WA0042.mp4?alt=media&token=fbcfa653-8365-419e-8b81-fe73103d266d',
-        'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703179432832Snapchat-1736359431.mp4?alt=media&token=7d3dcba3-9b3b-444e-bda3-703d01bb8cbb',
-        'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703179500001VID_20221119_114322_135.mp4?alt=media&token=5594e2da-3972-459e-aa27-8bd16dbe9501',
-        'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/1703179557072VID-20211205-WA0041.mp4?alt=media&token=9ac5ea8d-6c88-47e6-87a4-4c6b06c4db3c']}/>}/>
+          <Route exact path="/reels" element={<Carousel items={
+            [
+        {video:'https://firebasestorage.googleapis.com/v0/b/fdfed-d64be.appspot.com/o/VID-20220310-WA0087.mp4?alt=media&token=ee7c6008-b3e5-4273-9e15-c4677126605b',description:'ninth_video99999999999999999'}
+      ]
+        }/>}/>
+        <Route exact path="/addnewreel" element={<Addnewreel/>} />
         </Routes>
       </Router>
       <ToastContainer />

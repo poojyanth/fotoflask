@@ -1,0 +1,61 @@
+.OrganizationProfileContainer{
+    background-color: var(--secondary-color);
+}
+
+.OrganizationProfileContainer>.mainNavbar{
+    border-radius: 0;
+    border-bottom: 1px solid var(--tertiary-color);
+}
+
+.OrganizationSubContainer{
+    user-select: none;
+    padding: 1px 0 0px 0px;
+    display: flex;
+    background-color: var(--secondary-color);
+    flex-direction: row;
+}
+
+.OrganizationLeftContainer{
+    width: 5vw;
+    position: sticky;
+    overflow-x: hidden;
+    top: 8vh;
+    height: 92vh;
+    background-color: var(--primary-color);
+    transition: all 0.5s ease-in-out;
+    border-radius: 0 5px 5px 0;
+}
+
+.OrganizationLeftContainer:hover{
+    width: 10vw;
+}
+
+.OrganizationRightContainer{
+    width: 95vw;
+    height: 100%;
+    float: right;
+    background-color: var(--secondary-color);
+}
+
+.OrganizationProfileOptionItem{
+    transition: all 0.3s ease;
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.OrganizationProfileOptionItem:hover{
+    color: grey;
+    cursor: pointer;
+}
+
+.OrganizationLeftProfileContainer{
+    height: 20%;
+}
+
+.OrganizationProfileImage{
+    width: 70%;
+    border-radius: 50%;
+}

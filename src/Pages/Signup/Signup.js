@@ -18,7 +18,7 @@ export default function Login() {
   const [profilepicture , setProfilepicture] = useState('');
     const handleClick = (e)=>{
     e.preventDefault();
-    createuser(dispatch ,{email , password, username , phonenumber, profilepicture});
+    createuser(dispatch ,{email , password, username , phonenumber, profilepicture, Utype : 2});
     }
 
   return (

@@ -17,11 +17,7 @@ export default function ProfileLeftbar({profileid}) {
   let user = userDetails.user;
   let id =user.user._id;
   const jwt_here=user.jwttoken
-  // let followerscount = user.user.followers.length;
-  // let followingcount = user.user.following.length;
-  // let profilepic = user.user.profilepicture;
 
-  // const myUserId="656762a5c43095cb8ad3dc3c";
 
   const [user_details,setUser_Details] = useState([]);
   const [followings,setFollowings] = useState([]);
@@ -67,26 +63,38 @@ export default function ProfileLeftbar({profileid}) {
   let profilepic = user_details?.profilepicture;
 
  
-  const [Follow,setUnFollow] = useState([user.user.following.includes(profileid) ? "UnFollow" : "Follow" ]);
+  const [Follow,setUnFollow] = useState("Follow");
 
-// const handleFollow=async()=>{
-//   await fetch(`${BACKEND_URI}/api/user/follow/${id}`,{method:"PUT" ,
-//   headers:{
-//     'Content-Type':'application/json',
-//     jwttoken:jwt_here
-//   }, body: JSON.stringify({ user:user.user._id})})
-//   setUnFollow("UnFollowed")
-// }
- 
-const handleFollow = async()=>{
-  if(Follow === "Follow"){
-    await fetch(`${BACKEND_URI}/api/user/follow/${profileid}` , {method:'PUT', headers:{'Content-Type':"application/JSON" , jwttoken:jwt_here} , body:JSON.stringify({user:`${user.user._id}`})})
-    setUnFollow("UnFollow")
-  }else{
-    await fetch(`${BACKEND_URI}/api/user/follow/${profileid}` , {method:'PUT', headers:{'Content-Type':"application/JSON" , jwttoken:jwt_here} , body:JSON.stringify({user:`${user.user._id}`})})
-    setUnFollow("Follow")
+  useEffect(()=>{
+    const isFollowing = async()=>{
+      try{
+        if(user_details.followers.includes(id)){
+          setUnFollow("UnFollow")
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
+    isFollowing();
+  },[user_details.followers,id])
+
+  useEffect(()=>{
+    followingcount = user_details?.following?.length;
+    followerscount = user_details?.followers?.length;
+    profilepic = user_details?.profilepicture;
+  },[user_details])
+
+  const handleFollow = async()=>{
+    if(Follow === "Follow"){
+      await fetch(`${BACKEND_URI}/api/user/follow/${profileid}` , {method:'PUT', headers:{'Content-Type':"application/JSON" , jwttoken:jwt_here} , body:JSON.stringify({user:`${user.user._id}`})}).then(
+        setUnFollow("UnFollow")
+      )
+    }else{
+      await fetch(`${BACKEND_URI}/api/user/follow/${profileid}` , {method:'PUT', headers:{'Content-Type':"application/JSON" , jwttoken:jwt_here} , body:JSON.stringify({user:`${user.user._id}`})}).then(
+        setUnFollow("Follow")
+      )
+    }
   }
-}
 
 
 
@@ -114,11 +122,8 @@ const handleFollow = async()=>{
           <p style={{ color: "black", marginLeft: 20, fontSize: "14px" }}>Followers</p>
           <p style={{ color: "black", marginRight: 20, fontSize: "12px", marginTop: 17 }}>{followerscount}</p>
         </div>
-        <div style={{ marginTop: -20 }}>
-          <h5 style={{ color: "black", marginLeft: 10, fontSize: "14px", marginRight: 30, marginTop: 30, textAlign: "start" }}>User bio</h5>
-          <p style={{ color: "black", fontSize: "12px", marginTop: -20, textAlign: "start", marginLeft: "10px" }}>I would rather be despised of who I am, rather than loved by who I am not.</p>
-        </div>
-        { user.user._id !== profileid ? <div onClick={handleFollow}> <button style={{ width: "100%", paddingTop: 7, paddingBottom: 7, border: "none", backgroundColor: "green", color: "white", borderBottomRightRadius: '20px', borderBottomLeftRadius: '20px' }}>{Follow}</button></div> : <button style={{ width: "100%", paddingTop: 7, paddingBottom: 7, border: "none", backgroundColor: "green", color: "white", borderBottomRightRadius: '20px', borderBottomLeftRadius: '20px' }}>Edit Bio</button> }
+        
+        { user.user._id !== profileid ? <div  onClick={handleFollow} > <button className="profilepage-follow-button" style={{ width: "100%", paddingTop: 7, paddingBottom: 7, border: "none", backgroundColor: "green", color: "white", borderBottomRightRadius: '20px', borderBottomLeftRadius: '20px' }}>{Follow}</button></div> : <Link to='/settings'><button className="profilepage-follow-button" style={{ width: "100%", paddingTop: 7, paddingBottom: 7, border: "none", backgroundColor: "green", color: "white", borderBottomRightRadius: '20px', borderBottomLeftRadius: '20px' }}>Edit Bio</button></Link> }
 
 
 
@@ -137,7 +142,7 @@ const handleFollow = async()=>{
         {
           //he issue you're facing might be because you're not explicitly returning the JSX inside the map function. In arrow functions, if you use curly braces {}, you need to use the return statement explicitly. If you want to use parentheses (), you can skip the return statement.
         followings.map((item)=>(
-          <Link to={`/profilepage/${item.others._id}`} key={item.others._id} style={{width: '4pc',height: '4pc', cursor: "pointer", margin: '5px', textDecoration: 'none', color: 'black', overflowX: 'clip' }}>
+          <Link to={`/profilepage/${item.others._id}`} key={item.others._id} style={{width: '4pc',height: '4pc', marginLeft:'12px', cursor: "pointer", marginBottom: '43px', textDecoration: 'none', color: 'black', overflowX: 'clip' }}>
           
           <img src={`${(item.others.profilepicture)?item.others.profilepicture:defaultUser}`} className="friendimage" alt="" />
           <p style={{ marginTop: -2 }}>{item.others.username}</p> 

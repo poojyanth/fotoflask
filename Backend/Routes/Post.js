@@ -14,8 +14,8 @@ router.post("/createpost",verifytoken, async (req, res) => {
     console.log(req.body);
 
     try {
-        console.log(req.body);
-        console.log(req.user);
+        // console.log(req.body);
+        // console.log(req.user);
         let {description,image,video}= req.body;
   
         const newPost = new Post({         
@@ -67,7 +67,7 @@ router.get("/get/postID/:id", verifytoken, async (req, res) => {
             return res.status(400).json("NO POSTS FOUND ...");
         }
 
-        console.log(user_posts);
+        // console.log(user_posts);
         //  console.log(user_posts);
         res.status(200).json(user_posts);   
         } catch (error) {
@@ -76,6 +76,7 @@ router.get("/get/postID/:id", verifytoken, async (req, res) => {
 
 })
 
+// ROUTE-4 :- Update Post
 
 router.put("/update/post/:id",verifytoken, async (req, res) => {
 
@@ -102,7 +103,7 @@ router.put("/update/post/:id",verifytoken, async (req, res) => {
 
 })
 
-// ROUTE-4 :- FETCH ALL POSTS
+// ROUTE-5 :- FETCH ALL POSTS
 // METHOD USED :- GET
 router.get("/get/allpost",verifytoken, async (req, res) => {
     
@@ -124,7 +125,9 @@ router.get("/get/allpost",verifytoken, async (req, res) => {
 
 })
 
-router.get("/get/allposts", async (req, res) => {
+// ROUTE-6 :- Get ALL POSTS
+
+router.get("/get/allposts", verifytoken, async (req, res) => {
     
     try {
 
@@ -145,87 +148,69 @@ router.get("/get/allposts", async (req, res) => {
 
 
 
-// ROUTE-5: FETCH ALL POSTS WITH A KEY
+// ROUTE-7: FETCH ALL POSTS WITH A KEY
 // METHOD USED :- GET
 router.get("/get/:key", verifytoken, async (req, res) => {
     try {
-      // Get the current logged-in user
-      const currentUser = req.user.id; // Assuming you've set the user object in the request using middleware
-  
-      // Find the current user details from the User model
-      const user = await User.findById(currentUser);
-  
-      if (!user) {
-        return res.status(400).json("User not found");
-      }
-  
-      // Perform aggregation to merge User and Post data based on userID
-      const mergedData = await Post.aggregate([
-        {
-          $match: {
-            user: { $in: user.following.concat([user._id]) }, // Match posts of following users and current user
-          },
-        },
-        {
-          $lookup: {
-            from: "users", // Collection name for the User model
-            localField: "user",
-            foreignField: "_id",
-            as: "userData",
-          },
-        },
-        {
-          $unwind: "$userData", // Deconstruct the userData array
-        },
-        {
-          $project: {
-            _id: 1,
-            user: 1,
-            description: 1,
-            image: 1,
-            video: 1,
-            likes: 1,
-            dislikes: 1,
-            comments: 1,
-            createdAt: 1,
-            "userData.username": 1,
-            "userData.email": 1,
-            "userData.phonenumber": 1,
-            "userData.followers": 1,
-            "userData.following": 1,
-            "userData.profilepicture": 1,
-          },
-        },
-      ]);
+        const currentUser = req.user.id;
+        const user = await User.findById(currentUser);
+        if (!user) {
+            return res.status(400).json("User not found");
+        }
 
-        console.log(mergedData);
-  
-      // Search operation based on description, username, or tags
-      const searchQuery = req.params.key; // Assuming search query is passed through query parameter
-  
-      let searchResults = mergedData;
-  
-      if (searchQuery) {
-        searchResults = mergedData.filter((post) => {
-          return( 
-            post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            post.userData.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (post.tags && post.tags.includes(searchQuery.toLowerCase()))
-          );
+        const mergedData = await Post.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "userData",
+                },
+            },
+            {
+                $unwind: "$userData",
+            },
+            {
+                $project: {
+                    _id: 1,
+                    user: 1,
+                    description: 1,
+                    image: 1,
+                    video: 1,
+                    likes: 1,
+                    dislikes: 1,
+                    comments: 1,
+                    createdAt: 1,
+                    "userData.username": 1,
+                    "userData.email": 1,
+                    "userData.phonenumber": 1,
+                    "userData.followers": 1,
+                    "userData.following": 1,
+                    "userData.profilepicture": 1,
+                },
+            },
+        ]);
+
+        const searchQuery = req.params.key.toLowerCase();
+
+        let searchResults = mergedData.filter((post) => {
+            return (
+                post.description.toLowerCase().includes(searchQuery) ||
+                post.userData.username.toLowerCase().includes(searchQuery) ||
+                (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchQuery)))
+            );
         });
-      }
-      
-    //   console.log(searchQuery);
-    //   console.log(searchResults);
-    return res.status(200).json({post: searchResults});
-    } catch (error) {
-      return res
-        .status(400)
-        .json("Some error occurred in try-catch in /get/allpost");
-    }
-  });
 
-// ROUTE-10 :- FETCH ALL POSTS IN USER PROFILE PAGE
+        console.log(searchResults);
+        return res.status(200).json({ post: searchResults });
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json("Some error occurred in try-catch in /get/allpost");
+    }
+});
+
+
+// ROUTE-8 :- FETCH ALL POSTS IN USER PROFILE PAGE
 // METHOD USED :- GET
 router.get("/get/post/:id", verifytoken, async (req, res) => {
     try {
@@ -245,7 +230,7 @@ router.get("/get/post/:id", verifytoken, async (req, res) => {
 })
 
 
-// ROUTE-3 :- UPDATE A POST
+// ROUTE-9 :- UPDATE A POST
 // METHOD USED :- PUT
 router.put("/update/post/:id",verifytoken, async (req, res) => {
 
@@ -273,7 +258,7 @@ router.put("/update/post/:id",verifytoken, async (req, res) => {
 })
 
 
-// ROUTE-4:- LIKE A POST
+// ROUTE-10:- LIKE A POST
 // METHOD :- PUT
 
 router.put("/:id/like",verifytoken,async(req,res)=>{
@@ -296,7 +281,7 @@ router.put("/:id/like",verifytoken,async(req,res)=>{
 
 })
 
-// ROUTE-5:- DISLIKE A POST
+// ROUTE-11:- DISLIKE A POST
 // METHOD :- PUT
 
 router.put("/:id/dislike",verifytoken,async(req,res)=>{
@@ -321,7 +306,7 @@ router.put("/:id/dislike",verifytoken,async(req,res)=>{
 })
 
 
-// ROUTE-6:- ADD A COMMENT ON A POST
+// ROUTE-12:- ADD A COMMENT ON A POST
 // METHOD :- PUT
 
 router.put("/comment/post",verifytoken,async(req,res)=>{
@@ -343,7 +328,7 @@ router.put("/comment/post",verifytoken,async(req,res)=>{
 }
 })
 
-// ROUTE-7:- DELETE A POST
+// ROUTE-13:- DELETE A POST
 // METHOD :- DELETE
 
 router.delete("/delete/post/:id",verifytoken,async(req,res)=>{
@@ -370,7 +355,7 @@ router.delete("/delete/post/:id",verifytoken,async(req,res)=>{
 })
 
 
-
+// ROUTE-14:- Message
 
 router.post('/msg',verifytoken,async(req,res)=>{
     try{
@@ -386,7 +371,7 @@ router.post('/msg',verifytoken,async(req,res)=>{
 }
 })
 
-
+// ROUTE-15:- Get Message
 // get messages
 
 router.get('/get/chat/msg/:user1Id/:user2Id',async(req,res)=>{
@@ -411,8 +396,7 @@ router.get('/get/chat/msg/:user1Id/:user2Id',async(req,res)=>{
 }
 })
 
-
-// FETCH ALL LIKED POSTS OF A PARTICULAR USER
+// ROUTE-16:- Fetch all liked posts of a particular user
 router.get("/get_all_liked_posts",verifytoken, async (req, res) => {
 
     try {

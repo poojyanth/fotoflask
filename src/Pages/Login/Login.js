@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import "./Login.css"
 import { useState } from 'react';
-import { login } from '../../Component/ReduxContainer/apiCall';
+import { login} from '../../Component/ReduxContainer/apiCall';
 export default function Login() {
   const dispatch = useDispatch();
   if(useSelector((state)=>state.user.user)){

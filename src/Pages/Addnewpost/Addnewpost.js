@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
  import './addnewpost.css';
-import wicket from "../../Component/Images/default-cover-4.jpeg";
+import wicket from "../../Component/Images/wicket.jpg";
 import Navbar from '../../Component/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector}  from 'react-redux'
 import app from "../../firebase"
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { toast } from 'react-toastify';
 
 const AddNewPost = () => {
 
@@ -34,6 +35,7 @@ const AddNewPost = () => {
 
     const uploadTask = uploadBytesResumable(storageRef, file);
 
+    toast.info('Uploading Post ');
     uploadTask.on('state_changed', 
    (snapshot) => {
     // Observe state change events such as progress, pause, and resume
@@ -46,6 +48,8 @@ const AddNewPost = () => {
         break;
       case 'running':
         console.log('Upload is running');
+        break;
+      default:
         break;
     }
   }, 
@@ -65,7 +69,7 @@ const AddNewPost = () => {
     }).then((data)=>{
 
       navigate(`/`);
-      alert("IMAGE POST - SUCCESSFULLY UPLOADED ");
+      toast.success('Post Added Successfully');
 
       window.location.reload(true);
     })
@@ -91,11 +95,11 @@ const AddNewPost = () => {
   const handleTagChange = (e) => {
     const tagValue = `#${e.target.value}`;
     document.querySelector('.card-holder-name').innerText = tagValue;
-    document.querySelector('.card-holder-name1').innerText = tagValue;
+    document.querySelector('.card-holder-name1R').innerText = tagValue;
   };
 
   useEffect(() => {
-    let profilePic = document.getElementById("display-pic");
+    let profilePic = document.getElementById("display-picR");
     let inputFile = document.getElementById("inputt");
 
     inputFile.onchange = function () {
@@ -108,33 +112,35 @@ const AddNewPost = () => {
 
     document.querySelector('.cvv-input').oninput = () => {
       document.querySelector('.card-holder-name').innerText = "#" + document.querySelector('.cvv-input').value;
-      document.querySelector('.card-holder-name1').innerText = "#" + document.querySelector('.cvv-input').value;
+      document.querySelector('.card-holder-name1R').innerText = "#" + document.querySelector('.cvv-input').value;
     };
 
     document.querySelector('.cvv-input').onmouseenter = () => {
-      document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(-180deg)';
+      document.querySelector('.frontR').style.transform = 'perspective(1000px) rotateY(-180deg)';
       document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(0deg)';
     };
 
     document.querySelector('.cvv-input').onmouseleave = () => {
-      document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(0deg)';
+      document.querySelector('.frontR').style.transform = 'perspective(1000px) rotateY(0deg)';
       document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(180deg)';
     };
   }, []);
 
   return (
     <>
+ 
     <Navbar/>
-    <div className="container">
-      <div className="feedcontainer">
-        <div className="front">
-          <div className="feed">
-            <div className="head">
+ 
+   
+    <div className="containerR">
+      <div className="feedcontainerR">
+        <div className="frontR">
+          <div className="feedR">
+            <div className="headR" style={{marginBottom:'-9px'}}>
               <div className="profilepic3_details">
-                <img className="profilepic" src={`${user.user.profilepicture}` }/>
-                <div className="details">
-                  <h5>{user.user.username}</h5>
-                  <small>{user.user.username}</small>
+                <img className="profilepicR" src={`${user.user.profilepicture}` }/>
+                <div className="detailsR">
+                  <h5 style={{marginTop:'16px',fontSize:'16px',marginLeft:'-21px'}}>{user.user.username}</h5>
                 </div>
               </div>
               <div className="trpiledots">
@@ -143,8 +149,8 @@ const AddNewPost = () => {
                 </span>
               </div>
             </div>
-            <div className="photo">
-              <img id="display-pic" src={imageSrc || `${wicket}`} />
+            <div className="photoR">
+              <img id="display-picR" src={imageSrc || `${wicket}`} />
             </div>
             <div className="icons">
               <div className="mainicons">
@@ -169,8 +175,8 @@ const AddNewPost = () => {
           </div>
         </div>
         <div className="back">
-          <div className="backfeed">
-            <div className="card-holder-name1 ">.................</div>
+          <div className="backfeedR">
+            <div className="card-holder-name1R ">.................</div>
             <h1>FOTO FLASK</h1>
             <h3>.............NEW POST LOADING..........</h3>
           </div>

@@ -28,6 +28,9 @@ const Userschema = new mongoose.Schema({
     profilepicture:{
         type:String
     },
+    coverphoto:{
+        type:String
+    },
     Likedposts:{
         type:Array,
     },
@@ -36,8 +39,20 @@ const Userschema = new mongoose.Schema({
     }, 
     StoryDescription:{
         type:String
-    }
+    },
+    bio:{
+        type:String
+    },
+    type:{
+        type: Number,
+        default: 1,
+        immutable: true
+    },
 
+    StoryViewers: {
+        type: [String], 
+        default: [],
+      }
 
 
 })

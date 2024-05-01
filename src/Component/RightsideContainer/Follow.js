@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
+import { Link } from "react-router-dom";
 import addfriend from "../Images/add-user.png";
-import followed from "../Images/followed.png"
+import followed from "../Images/t5.png"
 import { useSelector}  from 'react-redux'
 import defaultUser from "../Images/blank-profile-picture-973460_960_720.webp"
 export default function Follow(props) {
@@ -28,7 +29,7 @@ export default function Follow(props) {
   return (
     <div style={{marginTop:"-10px"}} key={props.user_details._id}>
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-  
+    <Link to={`/profilepage/${props.user_details._id}`} style={{color: 'black', textDecoration: 'none'}}>
       <div style={{ display: 'flex', alignItems: "center" }}>
         <img src={`${(props.user_details.profilepicture)?props.user_details.profilepicture: defaultUser}`} className="Profileimage" alt="" />
         <div>
@@ -36,11 +37,12 @@ export default function Follow(props) {
           <p style={{ marginLeft: "10px" , textAlign:'start' , marginTop:"-16px" , fontSize:"11px" , color:"#aaa" }}>Suggested for you</p>
         </div>
       </div>
-    
+      </Link>
       <div style={{ backgroundColor: "#aaa", padding: '10px', marginRight: 13, borderRadius: "50%" , cursor:'pointer' }} >
-        <img src={`${followImg}`} className="addfriend" alt="" onClick={(e)=>handleFollow(props.user_details._id)}  />
+        <img src={`${followImg}`} style={{backgroundColor:'#aaa'}} className="addfriend" alt="" onClick={(e)=>handleFollow(props.user_details._id)}  />
       </div>
     </div>
   </div>
   )
 }
+
