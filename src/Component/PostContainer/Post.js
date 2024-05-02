@@ -256,7 +256,7 @@ export default function Post(props) {
             >
               <img
                 src={
-                  userDetails.profilepicture
+                  userDetails?.profilepicture
                     ? userDetails.profilepicture
                     : defaultUser
                 }
